@@ -20,19 +20,19 @@ public interface RequestApi {
     );
 
     @GET(Constants.GET_POPULAR_URL)
-    Call<MovieResponse> getPopularMoviesApi(
+    LiveData<ApiResponse<MovieResponse>> getPopularMoviesApi(
             @Query("api_key") String api_key,
             @Query("page") int page
     );
 
     @GET(Constants.GET_UPCOMING_URL)
-    Call<MovieResponse> getUpcomingMoviesApi(
+    LiveData<ApiResponse<MovieResponse>> getUpcomingMoviesApi(
             @Query("api_key") String api_key,
             @Query("page") int page
     );
 
     @GET(Constants.GET_SEARCH_URL)
-    Call<MovieResponse> searchMoviesApi(
+    LiveData<ApiResponse<MovieResponse>> searchMoviesApi(
             @Query("api_key") String api_key,
             @Query("include_adult") String include_adult,
             @Query("query") String query,

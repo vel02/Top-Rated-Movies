@@ -9,5 +9,9 @@
         android:id="@+id/action_upcoming"
         android:title="Upcoming" />
 
+    <item
+        android:id="@+id/action_top_rated"
+        android:title="Top Rated" />
+
 
 </menu>

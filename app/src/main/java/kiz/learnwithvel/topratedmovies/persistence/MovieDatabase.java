@@ -8,24 +8,24 @@ import androidx.room.RoomDatabase;
 
 import kiz.learnwithvel.topratedmovies.model.Movie;
 
-@Database(entities = {Movie.class}, version = 1)
-public abstract class TopRatedMovieDatabase extends RoomDatabase {
+@Database(entities = {Movie.class}, version = 6)
+public abstract class MovieDatabase extends RoomDatabase {
 
     public static final String DATABASE_NAME = "top_movies_db";
 
-    private static TopRatedMovieDatabase instance;
+    private static MovieDatabase instance;
 
-    public static TopRatedMovieDatabase getInstance(final Context context) {
+    public static MovieDatabase getInstance(final Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(
                     context.getApplicationContext(),
-                    TopRatedMovieDatabase.class,
+                    MovieDatabase.class,
                     DATABASE_NAME
             ).build();
         }
         return instance;
     }
 
-    public abstract TopRatedMovieDao getTopRatedMoviesDao();
+    public abstract MoviesDao getMoviesDao();
 
 }

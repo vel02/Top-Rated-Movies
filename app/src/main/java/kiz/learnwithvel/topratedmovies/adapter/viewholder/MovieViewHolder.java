@@ -79,7 +79,7 @@ public class MovieViewHolder extends BaseViewHolder implements View.OnClickListe
                     }
                 })
                 .transition(DrawableTransitionOptions.withCrossFade(1000))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .centerCrop()
                 .into(image);
     }

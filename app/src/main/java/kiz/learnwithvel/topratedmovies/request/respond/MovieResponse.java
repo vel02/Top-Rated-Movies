@@ -21,15 +21,23 @@ public class MovieResponse {
     @SerializedName("results")
     @Expose()
     private List<Movie> movies;
+    @SerializedName("success")
+    @Expose()
+    private String success;
 
     @Override
     public String toString() {
-        return "TopRatedMovieRespond{" +
+        return "MovieResponse{" +
                 "page='" + page + '\'' +
                 ", total_results='" + total_results + '\'' +
                 ", total_pages='" + total_pages + '\'' +
                 ", movies=" + movies +
+                ", success='" + success + '\'' +
                 '}';
+    }
+
+    public String getSuccess() {
+        return success;
     }
 
     public String getPage() {

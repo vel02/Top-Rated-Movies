@@ -6,18 +6,18 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import kiz.learnwithvel.topratedmovies.viewmodel.TopRatedListViewModel;
+import kiz.learnwithvel.topratedmovies.viewmodel.MovieListViewModel;
 
-public class TopRatedListViewModelFactory implements ViewModelProvider.Factory {
+public class MovieListViewModelFactory implements ViewModelProvider.Factory {
     private Application application;
 
-    public TopRatedListViewModelFactory(Application application) {
+    public MovieListViewModelFactory(Application application) {
         this.application = application;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new TopRatedListViewModel(application);
+        return (T) new MovieListViewModel(application);
     }
 }

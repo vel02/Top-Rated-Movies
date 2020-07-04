@@ -17,12 +17,22 @@ public class VideoResponse {
     @Expose()
     private List<Video> videos;
 
+    @SerializedName("success")
+    @Expose()
+    private String success;
+
+
     @Override
     public String toString() {
         return "VideoResponse{" +
                 "id='" + id + '\'' +
                 ", videos=" + videos +
+                ", success='" + success + '\'' +
                 '}';
+    }
+
+    public String getSuccess() {
+        return success;
     }
 
     public String getId() {

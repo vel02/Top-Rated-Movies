@@ -25,6 +25,8 @@ public class Movie {
     private String vote_average;
     @ColumnInfo(name = "original_language")
     private String original_language;
+    @ColumnInfo(name = "type_request")
+    private String type_request;
     @ColumnInfo(name = "timestamp")
     private int timestamp;
 
@@ -39,9 +41,11 @@ public class Movie {
         this.backdrop_path = backdrop_path;
         this.vote_average = vote_average;
         this.original_language = original_language;
+        this.timestamp = 0;
     }
 
     public Movie() {
+        this.timestamp = 0;
     }
 
     @NotNull
@@ -56,6 +60,7 @@ public class Movie {
                 ", backdrop_path='" + backdrop_path + '\'' +
                 ", vote_average='" + vote_average + '\'' +
                 ", original_language='" + original_language + '\'' +
+                ", type_request='" + type_request + '\'' +
                 ", timestamp=" + timestamp +
                 '}';
     }
@@ -130,5 +135,13 @@ public class Movie {
 
     public void setTimestamp(int timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getType_request() {
+        return type_request;
+    }
+
+    public void setType_request(String type_request) {
+        this.type_request = type_request;
     }
 }

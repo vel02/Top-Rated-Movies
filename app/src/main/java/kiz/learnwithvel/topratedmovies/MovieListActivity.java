@@ -21,12 +21,12 @@ import kiz.learnwithvel.topratedmovies.adapter.MovieRecyclerAdapter;
 import kiz.learnwithvel.topratedmovies.model.Movie;
 import kiz.learnwithvel.topratedmovies.util.Resource;
 import kiz.learnwithvel.topratedmovies.util.Utilities;
-import kiz.learnwithvel.topratedmovies.viewmodel.TopRatedListViewModel;
-import kiz.learnwithvel.topratedmovies.viewmodel.factory.TopRatedListViewModelFactory;
+import kiz.learnwithvel.topratedmovies.viewmodel.MovieListViewModel;
+import kiz.learnwithvel.topratedmovies.viewmodel.factory.MovieListViewModelFactory;
 
-import static kiz.learnwithvel.topratedmovies.viewmodel.TopRatedListViewModel.QUERY_EXHAUSTED;
+import static kiz.learnwithvel.topratedmovies.viewmodel.MovieListViewModel.QUERY_EXHAUSTED;
 
-public class TopRatedListActivity extends AppCompatActivity implements MovieRecyclerAdapter.OnMovieClickListener {
+public class MovieListActivity extends AppCompatActivity implements MovieRecyclerAdapter.OnMovieClickListener {
 
     private static final String TAG = "TopRatedListActivity";
 
@@ -34,7 +34,7 @@ public class TopRatedListActivity extends AppCompatActivity implements MovieRecy
     private MovieRecyclerAdapter adapter;
     private LinearLayoutManager layoutManager;
     private SearchView searchView;
-    private TopRatedListViewModel topRatedListViewModel;
+    private MovieListViewModel movieListViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +42,15 @@ public class TopRatedListActivity extends AppCompatActivity implements MovieRecy
         setContentView(R.layout.activity_top_rated);
         setSupportActionBar(findViewById(R.id.toolbar));
 
-        ViewModelProvider provider = new ViewModelProvider(this, new TopRatedListViewModelFactory(this.getApplication()));
-        topRatedListViewModel = provider.get(TopRatedListViewModel.class);
+        ViewModelProvider provider = new ViewModelProvider(this, new MovieListViewModelFactory(this.getApplication()));
+        movieListViewModel = provider.get(MovieListViewModel.class);
 
         searchView = findViewById(R.id.search_view);
         recyclerView = findViewById(R.id.rv_list);
         initRecyclerAdapter();
         initSearch();
 
-        topRatedListViewModel.getTopRatedMovies(1);
+        movieListViewModel.getTopRatedMovies(1);
         subscribeObservable();
     }
 
@@ -66,11 +66,15 @@ public class TopRatedListActivity extends AppCompatActivity implements MovieRecy
         switch (item.getItemId()) {
             case R.id.action_popular:
                 adapter.displayOnlyLoading();
-                Utilities.getPopularRequestRetrofit(adapter, TAG, 1);
+                movieListViewModel.getPopularMovies(1);
                 break;
             case R.id.action_upcoming:
                 adapter.displayOnlyLoading();
-                Utilities.getUpcomingRequestRetrofit(adapter, TAG, 1);
+                movieListViewModel.getUpcomingMovies(1);
+                break;
+            case R.id.action_top_rated:
+                adapter.displayOnlyLoading();
+                movieListViewModel.getTopRatedMovies(1);
                 break;
         }
 
@@ -87,7 +91,7 @@ public class TopRatedListActivity extends AppCompatActivity implements MovieRecy
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
 
                 if (!recyclerView.canScrollVertically(1)) {
-                    topRatedListViewModel.nextPage();
+                    movieListViewModel.nextPage();
                 }
 
             }
@@ -101,7 +105,7 @@ public class TopRatedListActivity extends AppCompatActivity implements MovieRecy
             @Override
             public boolean onQueryTextSubmit(String query) {
                 adapter.displayOnlyLoading();
-                Utilities.searchRequestRetrofit(adapter, TAG, query, 1);
+                movieListViewModel.searchMovies(query);
                 Utilities.clearSearch(searchView);
                 return false;
             }
@@ -114,31 +118,31 @@ public class TopRatedListActivity extends AppCompatActivity implements MovieRecy
     }
 
     private void subscribeObservable() {
-        topRatedListViewModel.getTopRatedMovies().observe(this, new Observer<Resource<List<Movie>>>() {
+        movieListViewModel.getTopRatedMovies().observe(this, new Observer<Resource<List<Movie>>>() {
             @Override
             public void onChanged(Resource<List<Movie>> listResource) {
                 if (listResource != null) {
                     if (listResource.data != null) {
                         switch (listResource.status) {
                             case LOADING:
-                                if (topRatedListViewModel.getPage() > 1) {
+                                if (movieListViewModel.getPage() > 1) {
                                     adapter.displayLoading();
                                 } else adapter.displayOnlyLoading();
                                 break;
                             case ERROR:
                                 Log.d(TAG, "onChanged: cannot refresh the cache.");
                                 Log.d(TAG, "onChanged: ERROR message:  " + listResource.message);
-                                Log.d(TAG, "onChanged: status ERROR, #recipes:  " + listResource.data.size());
+                                Log.d(TAG, "onChanged: status ERROR, #movies:  " + listResource.data.size());
                                 adapter.hideLoading();
                                 adapter.addList(listResource.data);
-                                Toast.makeText(TopRatedListActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MovieListActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
 
                                 if (Objects.requireNonNull(listResource.message).equals(QUERY_EXHAUSTED))
                                     adapter.displayExhausted();
                                 break;
                             case SUCCESS:
                                 Log.d(TAG, "onChanged: cache has been refreshed.");
-                                Log.d(TAG, "onChanged: status: SUCCESS, #recipes: " + listResource.data.size());
+                                Log.d(TAG, "onChanged: status: SUCCESS, #movies: " + listResource.data.size());
                                 adapter.hideLoading();
                                 adapter.addList(listResource.data);
                                 if (listResource.message != null && listResource.message.equals(QUERY_EXHAUSTED))

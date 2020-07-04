@@ -16,6 +16,18 @@ public class ApiResponse<T> {
         if (response.isSuccessful()) {
             T body = response.body();
 
+            if (body instanceof MovieResponse) {
+                if (!CheckApiKey.isMovieApiKeyValid((MovieResponse) body)) {
+                    return new ApiErrorResponse<>("Api key is invalid or expired.");
+                }
+            }
+
+            if (body instanceof VideoResponse) {
+                if (!CheckApiKey.isMovieApiKeyValid((VideoResponse) body)) {
+                    return new ApiErrorResponse<>("Api key is invalid or expired.");
+                }
+            }
+
             if (body == null || response.code() == 204) {
                 return new ApiEmptyResponse<>();
             } else return new ApiSuccessResponse<>(body);

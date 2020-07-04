@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".TopRatedListActivity">
+        <activity android:name=".MovieListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

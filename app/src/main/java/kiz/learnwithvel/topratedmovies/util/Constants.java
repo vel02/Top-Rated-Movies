@@ -12,4 +12,6 @@ public class Constants {
     public static final String GET_SEARCH_URL = "search/movie";
     public static final String GET_SEARCH_VIDEO_URL = "movie/{movie_id}/videos";
 
+    public static final int MOVIE_REFRESH_TIME = 60 * 60 * 24 * 7;
+
 }
