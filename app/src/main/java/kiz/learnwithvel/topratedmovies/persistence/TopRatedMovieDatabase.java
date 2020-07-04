@@ -26,5 +26,6 @@ public abstract class TopRatedMovieDatabase extends RoomDatabase {
         return instance;
     }
 
+    public abstract TopRatedMovieDao getTopRatedMoviesDao();
 
 }

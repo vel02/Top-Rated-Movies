@@ -26,38 +26,38 @@ public class Utilities {
         searchView.setIconified(true);
     }
 
-    @EverythingIsNonNull
-    public static void topRatedRequestRetrofit(MovieRecyclerAdapter adapter, String tag) {
-        final String TAG = tag;
-        RequestApi api = ServiceGenerator.getRequestApi();
-        Call<MovieResponse> respondCall = api.getTopRatedMoviesApi(Constants.API_KEY, 1);
-        respondCall.enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                if (response.raw().networkResponse() != null) {
-                    Log.d(TAG, "onResponse: response is from NETWORK...");
-                }
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-
-                        List<Movie> movies = response.body().getMovies();
-                        int count = 0;
-                        for (Movie movie : movies) {
-                            Log.d(tag, "onResponse: count: #" + ++count + " " + movie.getTitle());
-                        }
-                        adapter.addList(movies);
-                        Log.d(tag, "onResponse: total count is " + count);
-                        Log.d(tag, "==================================================");
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-            }
-        });
-    }
+//    @EverythingIsNonNull
+//    public static void topRatedRequestRetrofit(MovieRecyclerAdapter adapter, String tag) {
+//        final String TAG = tag;
+//        RequestApi api = ServiceGenerator.getRequestApi();
+//        Call<MovieResponse> respondCall = api.getTopRatedMoviesApi(Constants.API_KEY, 1);
+//        respondCall.enqueue(new Callback<MovieResponse>() {
+//            @Override
+//            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+//                if (response.raw().networkResponse() != null) {
+//                    Log.d(TAG, "onResponse: response is from NETWORK...");
+//                }
+//                if (response.isSuccessful()) {
+//                    if (response.body() != null) {
+//
+//                        List<Movie> movies = response.body().getMovies();
+//                        int count = 0;
+//                        for (Movie movie : movies) {
+//                            Log.d(tag, "onResponse: count: #" + ++count + " " + movie.getTitle());
+//                        }
+//                        adapter.addList(movies);
+//                        Log.d(tag, "onResponse: total count is " + count);
+//                        Log.d(tag, "==================================================");
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<MovieResponse> call, Throwable t) {
+//
+//            }
+//        });
+//    }
 
     @EverythingIsNonNull
     public static void searchRequestRetrofit(MovieRecyclerAdapter adapter, String tag, String query, int page) {

@@ -1,5 +1,8 @@
 package kiz.learnwithvel.topratedmovies.request;
 
+import androidx.lifecycle.LiveData;
+
+import kiz.learnwithvel.topratedmovies.request.respond.ApiResponse;
 import kiz.learnwithvel.topratedmovies.request.respond.MovieResponse;
 import kiz.learnwithvel.topratedmovies.request.respond.VideoResponse;
 import kiz.learnwithvel.topratedmovies.util.Constants;
@@ -11,7 +14,7 @@ import retrofit2.http.Query;
 public interface RequestApi {
 
     @GET(Constants.GET_TOP_RATED_URL)
-    Call<MovieResponse> getTopRatedMoviesApi(
+    LiveData<ApiResponse<MovieResponse>> getTopRatedMoviesApi(
             @Query("api_key") String api_key,
             @Query("page") int page
     );
