@@ -34,6 +34,7 @@ public class TopRatedListActivity extends AppCompatActivity implements MovieRecy
         initRecyclerAdapter();
         initSearch();
 
+        adapter.displayOnlyLoading();
         Utilities.topRatedRequestRetrofit(adapter, TAG);
     }
 
@@ -48,9 +49,11 @@ public class TopRatedListActivity extends AppCompatActivity implements MovieRecy
 
         switch (item.getItemId()) {
             case R.id.action_popular:
+                adapter.displayOnlyLoading();
                 Utilities.getPopularRequestRetrofit(adapter, TAG, 1);
                 break;
             case R.id.action_upcoming:
+                adapter.displayOnlyLoading();
                 Utilities.getUpcomingRequestRetrofit(adapter, TAG, 1);
                 break;
         }
@@ -69,6 +72,7 @@ public class TopRatedListActivity extends AppCompatActivity implements MovieRecy
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                adapter.displayOnlyLoading();
                 Utilities.searchRequestRetrofit(adapter, TAG, query, 1);
                 Utilities.clearSearch(searchView);
                 return false;
