@@ -1,17 +1,32 @@
 package kiz.learnwithvel.topratedmovies.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import org.jetbrains.annotations.NotNull;
 
+@Entity(tableName = "movies")
 public class Movie {
 
+    @PrimaryKey
     private int id;
+    @ColumnInfo(name = "title")
     private String title;
+    @ColumnInfo(name = "overview")
     private String overview;
+    @ColumnInfo(name = "release_date")
     private String release_date;
+    @ColumnInfo(name = "poster_path")
     private String poster_path;
+    @ColumnInfo(name = "backdrop_path")
     private String backdrop_path;
+    @ColumnInfo(name = "vote_average")
     private String vote_average;
+    @ColumnInfo(name = "original_language")
     private String original_language;
+    @ColumnInfo(name = "timestamp")
+    private int timestamp;
 
     public Movie(int id, String title, String overview, String release_date,
                  String poster_path, String backdrop_path, String vote_average,
@@ -41,6 +56,7 @@ public class Movie {
                 ", backdrop_path='" + backdrop_path + '\'' +
                 ", vote_average='" + vote_average + '\'' +
                 ", original_language='" + original_language + '\'' +
+                ", timestamp=" + timestamp +
                 '}';
     }
 
@@ -106,5 +122,13 @@ public class Movie {
 
     public void setOriginal_language(String original_language) {
         this.original_language = original_language;
+    }
+
+    public int getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(int timestamp) {
+        this.timestamp = timestamp;
     }
 }
