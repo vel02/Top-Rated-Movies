@@ -29,6 +29,9 @@ public class Movie {
     private String type_request;
     @ColumnInfo(name = "timestamp")
     private int timestamp;
+    @ColumnInfo(name = "top_rated_total")
+    private int top_rated_total;
+
 
     public Movie(int id, String title, String overview, String release_date,
                  String poster_path, String backdrop_path, String vote_average,
@@ -62,6 +65,7 @@ public class Movie {
                 ", original_language='" + original_language + '\'' +
                 ", type_request='" + type_request + '\'' +
                 ", timestamp=" + timestamp +
+                ", top_rated_total=" + top_rated_total +
                 '}';
     }
 
@@ -143,5 +147,13 @@ public class Movie {
 
     public void setType_request(String type_request) {
         this.type_request = type_request;
+    }
+
+    public int getTop_rated_total() {
+        return top_rated_total;
+    }
+
+    public void setTop_rated_total(int top_rated_total) {
+        this.top_rated_total = top_rated_total;
     }
 }

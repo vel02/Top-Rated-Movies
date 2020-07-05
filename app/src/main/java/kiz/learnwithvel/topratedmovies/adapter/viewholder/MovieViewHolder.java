@@ -25,7 +25,8 @@ import kiz.learnwithvel.topratedmovies.model.Movie;
 import kiz.learnwithvel.topratedmovies.util.Constants;
 
 
-public class MovieViewHolder extends BaseViewHolder implements View.OnClickListener {
+public class MovieViewHolder extends BaseViewHolder implements
+        View.OnClickListener, View.OnLongClickListener {
 
     ImageView image, error;
     TextView title, description, year;
@@ -42,8 +43,8 @@ public class MovieViewHolder extends BaseViewHolder implements View.OnClickListe
         this.description = itemView.findViewById(R.id.movie_desc);
         this.year = itemView.findViewById(R.id.movie_year);
         this.progressBar = itemView.findViewById(R.id.movie_progress);
-
         itemView.setOnClickListener(this);
+        itemView.setOnLongClickListener(this);
     }
 
     @SuppressLint("SetTextI18n")
@@ -86,8 +87,6 @@ public class MovieViewHolder extends BaseViewHolder implements View.OnClickListe
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .centerCrop()
                 .into(image);
-
-
     }
 
     @Override
@@ -111,5 +110,11 @@ public class MovieViewHolder extends BaseViewHolder implements View.OnClickListe
     @Override
     public void onClick(View view) {
         this.listener.onClick(getMovie());
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        this.listener.onLongClick(getMovie());
+        return false;
     }
 }

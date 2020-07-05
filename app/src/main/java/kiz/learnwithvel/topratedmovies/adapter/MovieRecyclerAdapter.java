@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kiz.learnwithvel.topratedmovies.R;
+import kiz.learnwithvel.topratedmovies.adapter.viewholder.ExhaustedViewHolder;
 import kiz.learnwithvel.topratedmovies.adapter.viewholder.LoadingViewHolder;
 import kiz.learnwithvel.topratedmovies.adapter.viewholder.MovieViewHolder;
 import kiz.learnwithvel.topratedmovies.model.Movie;
@@ -39,7 +40,7 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 return new LoadingViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.layout_loading_list_item, parent, false));
             case VIEW_TYPE_EXHAUSTED:
-                return new LoadingViewHolder(LayoutInflater.from(parent.getContext())
+                return new ExhaustedViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.layout_exhausted_list_item, parent, false));
             case VIEW_TYPE_NORMAL:
             default:
@@ -73,11 +74,22 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     }
 
     public void displayExhausted() {
-        hideLoading();
-        Movie exhausted = new Movie();
-        exhausted.setTitle(INDICATOR_VIEW_TYPE_EXHAUSTED);
-        movies.add(exhausted);
-        notifyDataSetChanged();
+        if (!isExhausted()) {
+            hideLoading();
+            Movie exhausted = new Movie();
+            exhausted.setTitle(INDICATOR_VIEW_TYPE_EXHAUSTED);
+            movies.add(exhausted);
+            notifyDataSetChanged();
+        }
+    }
+
+    private boolean isExhausted() {
+        if (movies != null) {
+            return movies.size() > 0
+                    && movies.get(movies.size() - 1).getTitle()
+                    .equals(INDICATOR_VIEW_TYPE_EXHAUSTED);
+        }
+        return false;
     }
 
     public void displayOnlyLoading() {
@@ -130,6 +142,8 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     public interface OnMovieClickListener {
         void onClick(Movie movie);
+
+        void onLongClick(Movie movie);
     }
 
 }

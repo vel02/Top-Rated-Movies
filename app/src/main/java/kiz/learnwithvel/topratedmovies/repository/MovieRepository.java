@@ -52,6 +52,8 @@ public class MovieRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<Movie> data) {
+                Boolean movie = MovieRepository.this.shouldFetch(data);
+                if (movie != null) return movie;
                 return true;
             }
 
@@ -83,6 +85,8 @@ public class MovieRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<Movie> data) {
+                Boolean movie = MovieRepository.this.shouldFetch(data);
+                if (movie != null) return movie;
                 return true;
             }
 
@@ -112,6 +116,8 @@ public class MovieRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<Movie> data) {
+                Boolean movie = MovieRepository.this.shouldFetch(data);
+                if (movie != null) return movie;
                 return true;
             }
 
@@ -142,6 +148,8 @@ public class MovieRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<Movie> data) {
+                Boolean movie = MovieRepository.this.shouldFetch(data);
+                if (movie != null) return movie;
                 return true;
             }
 
@@ -158,6 +166,24 @@ public class MovieRepository {
                         Constants.API_KEY, include_adult, query, page);
             }
         }.asLiveData();
+    }
+
+    @org.jetbrains.annotations.Nullable
+    private Boolean shouldFetch(@Nullable List<Movie> data) {
+        int timeToday = (int) (System.currentTimeMillis() / 1000);
+        int lastFetched;
+        if (data != null) {
+            //check
+            for (Movie movie : data) {
+                lastFetched = movie.getTimestamp();
+                if ((timeToday - lastFetched) >= Constants.MOVIE_MAX_AGE)
+                    return true;
+                else {
+                    return (movie.getTop_rated_total() > data.size());
+                }
+            }
+        } else return true;
+        return null;
     }
 
     public LiveData<Resource<List<Video>>> getVideosApi(String movie_id, String language) {
@@ -214,6 +240,8 @@ public class MovieRepository {
         List<Movie> list = item.getMovies();
         for (Movie movies : list) {
             movies.setType_request(type);
+            movies.setTop_rated_total(Integer.parseInt(item.getTotal_results()));
+            movies.setTimestamp((int) (System.currentTimeMillis() / 1000));
         }
     }
 

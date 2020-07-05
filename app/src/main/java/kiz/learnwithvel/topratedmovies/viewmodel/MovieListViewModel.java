@@ -46,6 +46,7 @@ public class MovieListViewModel extends AndroidViewModel {
 
     public void nextPage() {
         if (!isQueryExhausted && !isPerformingQuery) {
+            Log.d(TAG, "nextPage: called");
             page++;
             if (requestType.getValue() == RequestType.TOP_RATED)
                 executeTopRated();
@@ -53,8 +54,6 @@ public class MovieListViewModel extends AndroidViewModel {
                 executePopular();
             else if (requestType.getValue() == RequestType.UPCOMING)
                 executeUpcoming();
-            else if (requestType.getValue() == RequestType.VIDEO)
-                executeVideo();
             else if (requestType.getValue() == RequestType.SEARCH)
                 executeSearch();
         }
@@ -125,7 +124,6 @@ public class MovieListViewModel extends AndroidViewModel {
         if (!isPerformingQuery) {
             this.id = id;
             this.language = "en-US";
-            this.requestType.setValue(RequestType.VIDEO);
             this.isQueryExhausted = false;
             executeVideo();
         }

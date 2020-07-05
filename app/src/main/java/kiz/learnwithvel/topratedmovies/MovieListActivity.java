@@ -85,7 +85,6 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new MovieRecyclerAdapter(this);
-
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -198,6 +197,11 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
     @Override
     public void onClick(Movie movie) {
         Log.d(TAG, "onClick: " + movie.getTitle());
+    }
+
+    @Override
+    public void onLongClick(Movie movie) {
+        Log.d(TAG, "onLongClick: " + movie.getTitle());
         movieListViewModel.getVideos(String.valueOf(movie.getId()));
     }
 
@@ -205,4 +209,6 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+
 }
