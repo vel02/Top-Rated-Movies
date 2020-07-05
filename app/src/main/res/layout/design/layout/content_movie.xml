@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <!--Movie{id=14, title='American Beauty', overview='', release_date='1999-09-15', poster_path='/wby9315QzVKdW9BonAefg8jGTTb.jpg', backdrop_path='/DztBnZaqmla2sGUW9s8AyOmskT.jpg', vote_average='8', original_language='en', type_request='TOP_RATED_MOVIES', timestamp=1593970457, top_rated_total=7492}-->
+    <TextView
+        android:id="@+id/content_movie_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Title"
+        android:textColor="@android:color/primary_text_light"
+        app:layout_constraintEnd_toStartOf="@+id/content_movie_rating_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/content_movie_rating_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Ratings"
+        app:layout_constraintBaseline_toBaselineOf="@+id/content_movie_title"
+        app:layout_constraintEnd_toStartOf="@+id/content_movie_rating" />
+
+    <TextView
+        android:id="@+id/content_movie_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="8"
+        android:textColor="@android:color/primary_text_light"
+        app:layout_constraintBaseline_toBaselineOf="@+id/content_movie_rating_label"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/content_movie_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:lineSpacingExtra="4sp"
+        android:padding="18dp"
+        android:text="Lester Burnham, a depressed suburban father in a mid-life crisis, decides to turn his hectic life around after developing an infatuation with his daughter's attractive friend."
+        android:textAlignment="viewStart"
+        android:textColor="@android:color/primary_text_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content_movie_title" />
+
+    <TextView
+        android:id="@+id/content_movie_release"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="September 15, 1999"
+        android:textColor="@android:color/primary_text_light"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="@+id/content_movie_description"
+        app:layout_constraintStart_toStartOf="@+id/content_movie_description"
+        app:layout_constraintTop_toBottomOf="@+id/content_movie_description" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

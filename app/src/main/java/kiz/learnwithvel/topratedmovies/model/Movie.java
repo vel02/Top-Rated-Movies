@@ -1,5 +1,8 @@
 package kiz.learnwithvel.topratedmovies.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -7,7 +10,7 @@ import androidx.room.PrimaryKey;
 import org.jetbrains.annotations.NotNull;
 
 @Entity(tableName = "movies")
-public class Movie {
+public class Movie implements Parcelable {
 
     @PrimaryKey
     private int id;
@@ -49,6 +52,52 @@ public class Movie {
 
     public Movie() {
         this.timestamp = 0;
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    protected Movie(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        overview = in.readString();
+        release_date = in.readString();
+        poster_path = in.readString();
+        backdrop_path = in.readString();
+        vote_average = in.readString();
+        original_language = in.readString();
+        type_request = in.readString();
+        timestamp = in.readInt();
+        top_rated_total = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(overview);
+        dest.writeString(release_date);
+        dest.writeString(poster_path);
+        dest.writeString(backdrop_path);
+        dest.writeString(vote_average);
+        dest.writeString(original_language);
+        dest.writeString(type_request);
+        dest.writeInt(timestamp);
+        dest.writeInt(top_rated_total);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @NotNull

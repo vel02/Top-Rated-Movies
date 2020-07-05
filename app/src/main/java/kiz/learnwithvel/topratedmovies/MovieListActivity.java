@@ -1,5 +1,6 @@
 package kiz.learnwithvel.topratedmovies;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -197,6 +198,10 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
     @Override
     public void onClick(Movie movie) {
         Log.d(TAG, "onClick: " + movie.getTitle());
+        Intent intent = new Intent(this, MovieContentActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra("movie_content", movie);
+        startActivity(intent);
     }
 
     @Override
