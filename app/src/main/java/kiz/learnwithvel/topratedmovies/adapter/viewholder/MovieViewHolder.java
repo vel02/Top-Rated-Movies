@@ -2,6 +2,8 @@ package kiz.learnwithvel.topratedmovies.adapter.viewholder;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -26,13 +28,15 @@ import kiz.learnwithvel.topratedmovies.util.Constants;
 
 
 public class MovieViewHolder extends BaseViewHolder implements
-        View.OnClickListener, View.OnLongClickListener {
+        View.OnTouchListener,
+        GestureDetector.OnGestureListener {
 
     ImageView image, error;
     TextView title, description, year;
     ProgressBar progressBar;
 
     final MovieRecyclerAdapter.OnMovieClickListener listener;
+    final GestureDetector gestureDetector;
 
     public MovieViewHolder(@NonNull View itemView, MovieRecyclerAdapter.OnMovieClickListener listener) {
         super(itemView);
@@ -43,8 +47,8 @@ public class MovieViewHolder extends BaseViewHolder implements
         this.description = itemView.findViewById(R.id.movie_desc);
         this.year = itemView.findViewById(R.id.movie_year);
         this.progressBar = itemView.findViewById(R.id.movie_progress);
-        itemView.setOnClickListener(this);
-        itemView.setOnLongClickListener(this);
+        this.gestureDetector = new GestureDetector(itemView.getContext(), this);
+        itemView.setOnTouchListener(this);
     }
 
     @SuppressLint("SetTextI18n")
@@ -107,14 +111,44 @@ public class MovieViewHolder extends BaseViewHolder implements
         this.progressBar.setVisibility(View.VISIBLE);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public void onClick(View view) {
-        this.listener.onClick(getMovie());
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        this.gestureDetector.onTouchEvent(motionEvent);
+        return true;
     }
 
     @Override
-    public boolean onLongClick(View view) {
-        this.listener.onLongClick(getMovie());
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        this.listener.onClick(getMovie());
         return false;
     }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+        this.listener.onLongClick(getMovie());
+    }
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+
+    }
+
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+
 }

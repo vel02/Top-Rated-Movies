@@ -6,10 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import kiz.learnwithvel.topratedmovies.model.Movie;
+import kiz.learnwithvel.topratedmovies.model.Video;
 
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
     private Movie movie;
+    private Video video;
 
     public BaseViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -24,6 +26,11 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     public void onBind(Movie movie) {
         this.clear();
         this.movie = movie;
+    }
+
+    public void onBind(Video video) {
+        this.clear();
+        this.video = video;
     }
 
     public Movie getMovie() {

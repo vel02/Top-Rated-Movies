@@ -13,7 +13,6 @@ import androidx.lifecycle.Observer;
 import java.util.List;
 
 import kiz.learnwithvel.topratedmovies.model.Movie;
-import kiz.learnwithvel.topratedmovies.model.Video;
 import kiz.learnwithvel.topratedmovies.repository.MovieRepository;
 import kiz.learnwithvel.topratedmovies.util.Resource;
 
@@ -24,7 +23,6 @@ public class MovieListViewModel extends AndroidViewModel {
 
     private MovieRepository repository;
     private MediatorLiveData<Resource<List<Movie>>> movies = new MediatorLiveData<>();
-    private MediatorLiveData<Resource<List<Video>>> videos = new MediatorLiveData<>();
     private MutableLiveData<RequestType> requestType = new MutableLiveData<>();
 
 
@@ -61,10 +59,6 @@ public class MovieListViewModel extends AndroidViewModel {
 
     public LiveData<Resource<List<Movie>>> getMovies() {
         return movies;
-    }
-
-    public LiveData<Resource<List<Video>>> getVideos() {
-        return videos;
     }
 
     public LiveData<RequestType> getRequestType() {
@@ -120,44 +114,7 @@ public class MovieListViewModel extends AndroidViewModel {
         }
     }
 
-    public void getVideos(String id) {
-        if (!isPerformingQuery) {
-            this.id = id;
-            this.language = "en-US";
-            this.isQueryExhausted = false;
-            executeVideo();
-        }
-    }
 
-    private void executeVideo() {
-        this.isPerformingQuery = true;
-        final LiveData<Resource<List<Video>>> source = repository.getVideosApi(id, language);
-        videos.addSource(source, new Observer<Resource<List<Video>>>() {
-            @Override
-            public void onChanged(Resource<List<Video>> listResource) {
-                if (listResource != null) {
-                    videos.setValue(listResource);
-                    if (listResource.status == Resource.Status.SUCCESS) {
-                        isPerformingQuery = false;
-                        if (listResource.data != null && listResource.data.size() == 0) {
-                            videos.setValue(new Resource<>(
-                                    Resource.Status.ERROR,
-                                    listResource.data,
-                                    QUERY_EXHAUSTED
-                            ));
-                        }
-                        videos.removeSource(source);
-                    } else if (listResource.status == Resource.Status.ERROR) {
-                        isPerformingQuery = false;
-                        videos.removeSource(source);
-                    }
-                } else {
-                    isPerformingQuery = false;
-                    videos.removeSource(source);
-                }
-            }
-        });
-    }
 
     private void executeUpcoming() {
         this.isPerformingQuery = true;

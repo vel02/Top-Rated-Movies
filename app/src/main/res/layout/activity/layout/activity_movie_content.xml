@@ -46,6 +46,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_movie" />
+    <include layout="@layout/activity_movie" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
