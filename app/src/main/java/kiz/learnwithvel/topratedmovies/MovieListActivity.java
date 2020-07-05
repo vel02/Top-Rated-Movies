@@ -51,7 +51,6 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
         initRecyclerAdapter();
         initSearch();
 
-        movieListViewModel.getTopRatedMovies(1);
         subscribeObservable();
     }
 
@@ -137,19 +136,25 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
                                 adapter.hideLoading();
                                 Log.d(TAG, "onChanged: " + listResource.data);
                                 Toast.makeText(MovieListActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
-
-//                                if (Objects.requireNonNull(listResource.message).equals(QUERY_EXHAUSTED))
-//                                    adapter.displayExhausted();
                                 break;
                             case SUCCESS:
                                 Log.d(TAG, "onChanged: cache has been refreshed.");
                                 Log.d(TAG, "onChanged: status: SUCCESS, #Videos: " + listResource.data.size());
                                 adapter.hideLoading();
                                 Log.d(TAG, "onChanged: " + listResource.data);
-//                                if (listResource.message != null && listResource.message.equals(QUERY_EXHAUSTED))
-//                                    adapter.displayExhausted();
                                 break;
                         }
+                    }
+                }
+            }
+        });
+
+        movieListViewModel.getRequestType().observe(this, new Observer<MovieListViewModel.RequestType>() {
+            @Override
+            public void onChanged(MovieListViewModel.RequestType requestType) {
+                if (requestType != null) {
+                    if (requestType == MovieListViewModel.RequestType.TOP_RATED) {
+                        movieListViewModel.getTopRatedMovies(1);
                     }
                 }
             }
@@ -194,5 +199,10 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
     public void onClick(Movie movie) {
         Log.d(TAG, "onClick: " + movie.getTitle());
         movieListViewModel.getVideos(String.valueOf(movie.getId()));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

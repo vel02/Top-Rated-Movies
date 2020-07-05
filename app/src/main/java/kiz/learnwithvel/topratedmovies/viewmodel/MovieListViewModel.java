@@ -21,11 +21,12 @@ public class MovieListViewModel extends AndroidViewModel {
 
     public static final String QUERY_EXHAUSTED = "No more results.";
     private static final String TAG = "TopRatedListViewModel";
-    private MovieRepository repository;
 
+    private MovieRepository repository;
     private MediatorLiveData<Resource<List<Movie>>> movies = new MediatorLiveData<>();
     private MediatorLiveData<Resource<List<Video>>> videos = new MediatorLiveData<>();
     private MutableLiveData<RequestType> requestType = new MutableLiveData<>();
+
 
     private boolean isPerformingQuery;
     private boolean isQueryExhausted;
@@ -38,6 +39,7 @@ public class MovieListViewModel extends AndroidViewModel {
     public MovieListViewModel(@NonNull Application application) {
         super(application);
         this.repository = MovieRepository.getInstance(application);
+        this.requestType.setValue(RequestType.TOP_RATED);
     }
 
     private long requestStartTime;
@@ -64,6 +66,14 @@ public class MovieListViewModel extends AndroidViewModel {
 
     public LiveData<Resource<List<Video>>> getVideos() {
         return videos;
+    }
+
+    public LiveData<RequestType> getRequestType() {
+        return requestType;
+    }
+
+    public RequestType getCurrentRequest() {
+        return requestType.getValue();
     }
 
     public int getPage() {

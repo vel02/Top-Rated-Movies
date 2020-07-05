@@ -97,9 +97,9 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     public void hideLoading() {
         if (isLoading()) {
-            if (movies.get(0).getTitle().equals(INDICATOR_VIEW_TYPE_LOADING)) {
+            if (movies.get(0).getTitle().equals(INDICATOR_VIEW_TYPE_LOADING) || movies.get(0).getTitle().equals(INDICATOR_VIEW_TYPE_EXHAUSTED)) {
                 movies.remove(0);
-            } else if (movies.get(movies.size() - 1).getTitle().equals(INDICATOR_VIEW_TYPE_LOADING)) {
+            } else if (movies.get(movies.size() - 1).getTitle().equals(INDICATOR_VIEW_TYPE_LOADING) || movies.get(movies.size() - 1).getTitle().equals(INDICATOR_VIEW_TYPE_EXHAUSTED)) {
                 movies.remove(movies.size() - 1);
             }
         }

@@ -136,10 +136,7 @@ public class MovieRepository {
             @Override
             protected void saveCallResult(@NonNull MovieResponse item) {
                 if (item.getMovies() != null) {
-//                    insertMovies(item, "SEARCH_MOVIES");
-                    setRequestType(item, "SEARCH_MOVIES");
-                    Movie[] movies = new Movie[item.getMovies().size()];
-                    moviesDao.insertMoviesCompletely(item.getMovies().toArray(movies));
+                    insertMovies(item, "SEARCH_MOVIES");
                 }
             }
 
