@@ -7,8 +7,9 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import kiz.learnwithvel.topratedmovies.model.Movie;
+import kiz.learnwithvel.topratedmovies.model.Video;
 
-@Database(entities = {Movie.class}, version = 6)
+@Database(entities = {Movie.class, Video.class}, version = 9)
 public abstract class MovieDatabase extends RoomDatabase {
 
     public static final String DATABASE_NAME = "top_movies_db";

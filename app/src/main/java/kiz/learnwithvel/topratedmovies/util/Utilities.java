@@ -1,19 +1,6 @@
 package kiz.learnwithvel.topratedmovies.util;
 
-import android.util.Log;
-
 import androidx.appcompat.widget.SearchView;
-
-import java.util.List;
-
-import kiz.learnwithvel.topratedmovies.model.Video;
-import kiz.learnwithvel.topratedmovies.request.RequestApi;
-import kiz.learnwithvel.topratedmovies.request.ServiceGenerator;
-import kiz.learnwithvel.topratedmovies.request.respond.VideoResponse;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.internal.EverythingIsNonNull;
 
 public class Utilities {
 
@@ -90,37 +77,37 @@ public class Utilities {
 //    }
 
 
-    @EverythingIsNonNull
-    public static void getVideoRequestRetrofit(String tag, String id) {
-        final String TAG = tag;
-        RequestApi api = ServiceGenerator.getRequestApi();
-        Call<VideoResponse> respondCall = api.getVideoApi(id, Constants.API_KEY, "en-US");
-        respondCall.enqueue(new Callback<VideoResponse>() {
-            @Override
-            public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
-                if (response.raw().networkResponse() != null) {
-                    Log.d(TAG, "onResponse: response is from NETWORK...");
-                }
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-
-                        List<Video> videos = response.body().getVideos();
-                        int count = 0;
-                        for (Video video : videos) {
-                            Log.d(tag, "onResponse: count: #" + ++count + " " + video.getName());
-                        }
-                        Log.d(tag, "onResponse: total count is " + count);
-                        Log.d(tag, "==================================================");
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<VideoResponse> call, Throwable t) {
-
-            }
-        });
-    }
+//    @EverythingIsNonNull
+//    public static void getVideoRequestRetrofit(String tag, String id) {
+//        final String TAG = tag;
+//        RequestApi api = ServiceGenerator.getRequestApi();
+//        Call<VideoResponse> respondCall = api.getVideoApi(id, Constants.API_KEY, "en-US");
+//        respondCall.enqueue(new Callback<VideoResponse>() {
+//            @Override
+//            public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
+//                if (response.raw().networkResponse() != null) {
+//                    Log.d(TAG, "onResponse: response is from NETWORK...");
+//                }
+//                if (response.isSuccessful()) {
+//                    if (response.body() != null) {
+//
+//                        List<Video> videos = response.body().getVideos();
+//                        int count = 0;
+//                        for (Video video : videos) {
+//                            Log.d(tag, "onResponse: count: #" + ++count + " " + video.getName());
+//                        }
+//                        Log.d(tag, "onResponse: total count is " + count);
+//                        Log.d(tag, "==================================================");
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<VideoResponse> call, Throwable t) {
+//
+//            }
+//        });
+//    }
 
 //    @EverythingIsNonNull
 //    public static void getPopularRequestRetrofit(MovieRecyclerAdapter adapter, String tag, int page) {

@@ -60,8 +60,12 @@ public class MovieViewHolder extends BaseViewHolder implements View.OnClickListe
 
     @Override
     protected void setupImage() {
+        String img = "";
+        if (getMovie().getPoster_path() != null) {
+            img = Constants.BASE_URL_IMG + getMovie().getPoster_path();
+        }
         Glide.with(itemView.getContext())
-                .load(Constants.BASE_URL_IMG + getMovie().getPoster_path())
+                .load(img)
                 .listener(new RequestListener<Drawable>() {
 
                     @Override
@@ -82,6 +86,8 @@ public class MovieViewHolder extends BaseViewHolder implements View.OnClickListe
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .centerCrop()
                 .into(image);
+
+
     }
 
     @Override

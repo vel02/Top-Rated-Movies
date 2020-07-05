@@ -8,6 +8,7 @@ import androidx.room.Query;
 import java.util.List;
 
 import kiz.learnwithvel.topratedmovies.model.Movie;
+import kiz.learnwithvel.topratedmovies.model.Video;
 
 import static androidx.room.OnConflictStrategy.IGNORE;
 import static androidx.room.OnConflictStrategy.REPLACE;
@@ -18,8 +19,19 @@ public interface MoviesDao {
     @Insert(onConflict = IGNORE)
     long[] insertMovies(Movie... movies);
 
+    @Insert
+    void insertMoviesCompletely(Movie... movies);
+
+    @Insert(onConflict = IGNORE)
+    long[] insertVideos(Video... videos);
+
     @Insert(onConflict = REPLACE)
-    long insertMovie(Movie movie);
+    long insertVideo(Video video);
+
+    @Query("UPDATE videos SET id = :id, `key` = :key, name = :name, site = :site, size = :size, type = :type " +
+            "WHERE id = :id")
+    void updateVideos(String id, String key, String name, String site, String size, String type);
+
 
     @Query("UPDATE movies SET title = :title, overview = :overview, release_date = :release_date, " +
             "poster_path = :poster_path, backdrop_path = :backdrop_path, " +
@@ -36,7 +48,10 @@ public interface MoviesDao {
     @Query("SELECT * FROM movies WHERE type_request = 'UPCOMING_MOVIES' LIMIT (:page * 20)")
     LiveData<List<Movie>> getUpcomingMovies(int page);
 
-    @Query("SELECT DISTINCT * FROM movies WHERE title LIKE '%' || :query || '%' LIMIT (:page * 20)")
+    @Query("SELECT * FROM movies WHERE title LIKE '%' || :query || '%' LIMIT (:page * 20)")
     LiveData<List<Movie>> getMovies(String query, int page);
+
+    @Query("SELECT * FROM videos WHERE movie_id = :movie_id")
+    LiveData<List<Video>> getVideos(String movie_id);
 
 }

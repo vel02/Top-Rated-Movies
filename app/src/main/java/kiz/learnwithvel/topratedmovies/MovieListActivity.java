@@ -19,6 +19,7 @@ import java.util.Objects;
 
 import kiz.learnwithvel.topratedmovies.adapter.MovieRecyclerAdapter;
 import kiz.learnwithvel.topratedmovies.model.Movie;
+import kiz.learnwithvel.topratedmovies.model.Video;
 import kiz.learnwithvel.topratedmovies.util.Resource;
 import kiz.learnwithvel.topratedmovies.util.Utilities;
 import kiz.learnwithvel.topratedmovies.viewmodel.MovieListViewModel;
@@ -105,6 +106,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
             @Override
             public boolean onQueryTextSubmit(String query) {
                 adapter.displayOnlyLoading();
+                recyclerView.smoothScrollToPosition(0);
                 movieListViewModel.searchMovies(query);
                 Utilities.clearSearch(searchView);
                 return false;
@@ -118,7 +120,42 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
     }
 
     private void subscribeObservable() {
-        movieListViewModel.getTopRatedMovies().observe(this, new Observer<Resource<List<Movie>>>() {
+        //TODO: Temporary place of request videos, it should be in the VideoActivity.class
+        movieListViewModel.getVideos().observe(this, new Observer<Resource<List<Video>>>() {
+            @Override
+            public void onChanged(Resource<List<Video>> listResource) {
+                if (listResource != null) {
+                    if (listResource.data != null) {
+                        switch (listResource.status) {
+                            case LOADING:
+//                                adapter.displayOnlyLoading();
+                                break;
+                            case ERROR:
+                                Log.d(TAG, "onChanged: cannot refresh the cache.");
+                                Log.d(TAG, "onChanged: ERROR message:  " + listResource.message);
+                                Log.d(TAG, "onChanged: status ERROR, #Videos:  " + listResource.data.size());
+                                adapter.hideLoading();
+                                Log.d(TAG, "onChanged: " + listResource.data);
+                                Toast.makeText(MovieListActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
+
+//                                if (Objects.requireNonNull(listResource.message).equals(QUERY_EXHAUSTED))
+//                                    adapter.displayExhausted();
+                                break;
+                            case SUCCESS:
+                                Log.d(TAG, "onChanged: cache has been refreshed.");
+                                Log.d(TAG, "onChanged: status: SUCCESS, #Videos: " + listResource.data.size());
+                                adapter.hideLoading();
+                                Log.d(TAG, "onChanged: " + listResource.data);
+//                                if (listResource.message != null && listResource.message.equals(QUERY_EXHAUSTED))
+//                                    adapter.displayExhausted();
+                                break;
+                        }
+                    }
+                }
+            }
+        });
+
+        movieListViewModel.getMovies().observe(this, new Observer<Resource<List<Movie>>>() {
             @Override
             public void onChanged(Resource<List<Movie>> listResource) {
                 if (listResource != null) {
@@ -145,8 +182,6 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
                                 Log.d(TAG, "onChanged: status: SUCCESS, #movies: " + listResource.data.size());
                                 adapter.hideLoading();
                                 adapter.addList(listResource.data);
-                                if (listResource.message != null && listResource.message.equals(QUERY_EXHAUSTED))
-                                    adapter.displayExhausted();
                                 break;
                         }
                     }
@@ -158,6 +193,6 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
     @Override
     public void onClick(Movie movie) {
         Log.d(TAG, "onClick: " + movie.getTitle());
-        Utilities.getVideoRequestRetrofit(TAG, String.valueOf(movie.getId()));
+        movieListViewModel.getVideos(String.valueOf(movie.getId()));
     }
 }

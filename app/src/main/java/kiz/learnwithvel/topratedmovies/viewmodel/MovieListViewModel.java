@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 import java.util.List;
 
 import kiz.learnwithvel.topratedmovies.model.Movie;
+import kiz.learnwithvel.topratedmovies.model.Video;
 import kiz.learnwithvel.topratedmovies.repository.MovieRepository;
 import kiz.learnwithvel.topratedmovies.util.Resource;
 
@@ -23,12 +24,15 @@ public class MovieListViewModel extends AndroidViewModel {
     private MovieRepository repository;
 
     private MediatorLiveData<Resource<List<Movie>>> movies = new MediatorLiveData<>();
+    private MediatorLiveData<Resource<List<Video>>> videos = new MediatorLiveData<>();
     private MutableLiveData<RequestType> requestType = new MutableLiveData<>();
-    private String query;
 
     private boolean isPerformingQuery;
     private boolean isQueryExhausted;
     private int page;
+    private String id;
+    private String query;
+    private String language;
     private String include_adult;
 
     public MovieListViewModel(@NonNull Application application) {
@@ -47,12 +51,19 @@ public class MovieListViewModel extends AndroidViewModel {
                 executePopular();
             else if (requestType.getValue() == RequestType.UPCOMING)
                 executeUpcoming();
-            else executeSearch();
+            else if (requestType.getValue() == RequestType.VIDEO)
+                executeVideo();
+            else if (requestType.getValue() == RequestType.SEARCH)
+                executeSearch();
         }
     }
 
-    public LiveData<Resource<List<Movie>>> getTopRatedMovies() {
+    public LiveData<Resource<List<Movie>>> getMovies() {
         return movies;
+    }
+
+    public LiveData<Resource<List<Video>>> getVideos() {
+        return videos;
     }
 
     public int getPage() {
@@ -98,6 +109,46 @@ public class MovieListViewModel extends AndroidViewModel {
             this.isQueryExhausted = false;
             executeUpcoming();
         }
+    }
+
+    public void getVideos(String id) {
+        if (!isPerformingQuery) {
+            this.id = id;
+            this.language = "en-US";
+            this.requestType.setValue(RequestType.VIDEO);
+            this.isQueryExhausted = false;
+            executeVideo();
+        }
+    }
+
+    private void executeVideo() {
+        this.isPerformingQuery = true;
+        final LiveData<Resource<List<Video>>> source = repository.getVideosApi(id, language);
+        videos.addSource(source, new Observer<Resource<List<Video>>>() {
+            @Override
+            public void onChanged(Resource<List<Video>> listResource) {
+                if (listResource != null) {
+                    videos.setValue(listResource);
+                    if (listResource.status == Resource.Status.SUCCESS) {
+                        isPerformingQuery = false;
+                        if (listResource.data != null && listResource.data.size() == 0) {
+                            videos.setValue(new Resource<>(
+                                    Resource.Status.ERROR,
+                                    listResource.data,
+                                    QUERY_EXHAUSTED
+                            ));
+                        }
+                        videos.removeSource(source);
+                    } else if (listResource.status == Resource.Status.ERROR) {
+                        isPerformingQuery = false;
+                        videos.removeSource(source);
+                    }
+                } else {
+                    isPerformingQuery = false;
+                    videos.removeSource(source);
+                }
+            }
+        });
     }
 
     private void executeUpcoming() {
@@ -175,17 +226,18 @@ public class MovieListViewModel extends AndroidViewModel {
                     if (listResource.status == Resource.Status.SUCCESS) {
                         Log.d(TAG, "onChanged: REQUEST TIME: " + (System.currentTimeMillis() - requestStartTime) / 1000 + " seconds.");
                         isPerformingQuery = false;
-                        if (listResource.data != null) {
-                            if (listResource.data.size() == 0) {
-                                isQueryExhausted = true;
-                                movies.setValue(
-                                        new Resource<>(
-                                                Resource.Status.ERROR,
-                                                listResource.data,
-                                                QUERY_EXHAUSTED
-                                        )
-                                );
-                            }
+                        if ((listResource.data != null
+                                && listResource.data.size() == 0)
+                                || (listResource.data != null
+                                && listResource.data.size() < 20)) {
+                            isQueryExhausted = true;
+                            movies.setValue(
+                                    new Resource<>(
+                                            Resource.Status.ERROR,
+                                            listResource.data,
+                                            QUERY_EXHAUSTED
+                                    )
+                            );
                         }
                         movies.removeSource(repositorySource);
                     } else if (listResource.status == Resource.Status.ERROR) {
@@ -214,16 +266,14 @@ public class MovieListViewModel extends AndroidViewModel {
                     if (listResource.status == Resource.Status.SUCCESS) {
                         Log.d(TAG, "onChanged: REQUEST TIME: " + (System.currentTimeMillis() - requestStartTime) / 1000 + " seconds.");
                         isPerformingQuery = false;
-                        if (listResource.data != null) {
-                            if (listResource.data.size() == 0) {
-                                isQueryExhausted = true;
-                                movies.setValue(
-                                        new Resource<>(
-                                                Resource.Status.ERROR,
-                                                listResource.data,
-                                                QUERY_EXHAUSTED
-                                        ));
-                            }
+                        if (listResource.data != null && listResource.data.size() == 0) {
+                            isQueryExhausted = true;
+                            movies.setValue(
+                                    new Resource<>(
+                                            Resource.Status.ERROR,
+                                            listResource.data,
+                                            QUERY_EXHAUSTED
+                                    ));
                         }
                         movies.removeSource(repositorySource);
                     } else if (listResource.status == Resource.Status.ERROR) {
@@ -238,6 +288,6 @@ public class MovieListViewModel extends AndroidViewModel {
         });
     }
 
-    public enum RequestType {SEARCH, TOP_RATED, POPULAR, UPCOMING}
+    public enum RequestType {SEARCH, TOP_RATED, POPULAR, UPCOMING, VIDEO}
 
 }

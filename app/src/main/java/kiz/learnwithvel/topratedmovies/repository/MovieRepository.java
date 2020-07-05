@@ -10,11 +10,13 @@ import java.util.List;
 
 import kiz.learnwithvel.topratedmovies.AppExecutor;
 import kiz.learnwithvel.topratedmovies.model.Movie;
+import kiz.learnwithvel.topratedmovies.model.Video;
 import kiz.learnwithvel.topratedmovies.persistence.MovieDatabase;
 import kiz.learnwithvel.topratedmovies.persistence.MoviesDao;
 import kiz.learnwithvel.topratedmovies.request.ServiceGenerator;
 import kiz.learnwithvel.topratedmovies.request.respond.ApiResponse;
 import kiz.learnwithvel.topratedmovies.request.respond.MovieResponse;
+import kiz.learnwithvel.topratedmovies.request.respond.VideoResponse;
 import kiz.learnwithvel.topratedmovies.util.Constants;
 import kiz.learnwithvel.topratedmovies.util.NetworkBoundResource;
 import kiz.learnwithvel.topratedmovies.util.Resource;
@@ -134,7 +136,10 @@ public class MovieRepository {
             @Override
             protected void saveCallResult(@NonNull MovieResponse item) {
                 if (item.getMovies() != null) {
-                    insertMovies(item, "SEARCH_MOVIES");
+//                    insertMovies(item, "SEARCH_MOVIES");
+                    setRequestType(item, "SEARCH_MOVIES");
+                    Movie[] movies = new Movie[item.getMovies().size()];
+                    moviesDao.insertMoviesCompletely(item.getMovies().toArray(movies));
                 }
             }
 
@@ -154,6 +159,56 @@ public class MovieRepository {
             protected LiveData<ApiResponse<MovieResponse>> createCall() {
                 return ServiceGenerator.getRequestApi().searchMoviesApi(
                         Constants.API_KEY, include_adult, query, page);
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<List<Video>>> getVideosApi(String movie_id, String language) {
+        return new NetworkBoundResource<List<Video>, VideoResponse>(AppExecutor.getInstance()) {
+
+            @Override
+            protected void saveCallResult(@NonNull VideoResponse item) {
+                if (item.getVideos() != null) {
+
+                    List<Video> list = item.getVideos();
+                    for (Video video : list) {
+                        video.setMovie_id(item.getId());
+                    }
+
+                    Video[] videos = new Video[item.getVideos().size()];
+                    int index = 0;
+                    for (long row : moviesDao.insertVideos(item.getVideos().toArray(videos))) {
+                        if (row == -1) {
+                            moviesDao.updateVideos(
+                                    videos[index].getId(),
+                                    videos[index].getKey(),
+                                    videos[index].getName(),
+                                    videos[index].getSite(),
+                                    videos[index].getSize(),
+                                    videos[index].getType()
+                            );
+                        }
+                        index++;
+                    }
+                }
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<Video> data) {
+                return true;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<Video>> loadFromDb() {
+                return moviesDao.getVideos(movie_id);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<VideoResponse>> createCall() {
+                return ServiceGenerator.getRequestApi().getVideoApi(
+                        movie_id, Constants.API_KEY, language);
             }
         }.asLiveData();
     }
