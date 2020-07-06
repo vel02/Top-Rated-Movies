@@ -33,6 +33,10 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         this.video = video;
     }
 
+    public Video getVideo() {
+        return video;
+    }
+
     public Movie getMovie() {
         return movie;
     }

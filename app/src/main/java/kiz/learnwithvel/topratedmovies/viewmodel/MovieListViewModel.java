@@ -25,7 +25,6 @@ public class MovieListViewModel extends AndroidViewModel {
     private MediatorLiveData<Resource<List<Movie>>> movies = new MediatorLiveData<>();
     private MutableLiveData<RequestType> requestType = new MutableLiveData<>();
 
-
     private boolean isPerformingQuery;
     private boolean isQueryExhausted;
     private int page;
@@ -63,10 +62,6 @@ public class MovieListViewModel extends AndroidViewModel {
 
     public LiveData<RequestType> getRequestType() {
         return requestType;
-    }
-
-    public RequestType getCurrentRequest() {
-        return requestType.getValue();
     }
 
     public int getPage() {
@@ -113,7 +108,6 @@ public class MovieListViewModel extends AndroidViewModel {
             executeUpcoming();
         }
     }
-
 
 
     private void executeUpcoming() {

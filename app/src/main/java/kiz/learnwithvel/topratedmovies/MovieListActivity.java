@@ -45,7 +45,6 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
 
         ViewModelProvider provider = new ViewModelProvider(this, new MovieListViewModelFactory(this.getApplication()));
         movieListViewModel = provider.get(MovieListViewModel.class);
-
         searchView = findViewById(R.id.search_view);
         recyclerView = findViewById(R.id.rv_list);
         initRecyclerAdapter();
@@ -168,7 +167,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
     @Override
     public void onClick(Movie movie) {
         Log.d(TAG, "onClick: " + movie.getTitle());
-        Intent intent = new Intent(this, MovieContentActivity.class);
+        Intent intent = new Intent(MovieListActivity.this, MovieContentActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra("movie_content", movie);
         startActivity(intent);
@@ -177,15 +176,10 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
     @Override
     public void onLongClick(Movie movie) {
         Log.d(TAG, "onLongClick: " + movie.getTitle());
-        Intent intent = new Intent(this, VideoListActivity.class);
+        Intent intent = new Intent(MovieListActivity.this, VideoListActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra("video_content", String.valueOf(movie.getId()));
         startActivity(intent);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
 

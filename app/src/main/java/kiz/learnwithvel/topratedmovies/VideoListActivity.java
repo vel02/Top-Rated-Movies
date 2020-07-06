@@ -1,5 +1,6 @@
 package kiz.learnwithvel.topratedmovies;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,7 +22,7 @@ import kiz.learnwithvel.topratedmovies.util.Resource;
 import kiz.learnwithvel.topratedmovies.viewmodel.VideoListViewModel;
 import kiz.learnwithvel.topratedmovies.viewmodel.factory.VideoListViewModelFactory;
 
-public class VideoListActivity extends BaseActivity {
+public class VideoListActivity extends BaseActivity implements VideoRecyclerAdapter.OnVideoClickListener {
 
     private static final String TAG = "VideoListActivity";
 
@@ -59,7 +60,7 @@ public class VideoListActivity extends BaseActivity {
     private void initRecyclerAdapter() {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new VideoRecyclerAdapter();
+        adapter = new VideoRecyclerAdapter(this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -116,8 +117,12 @@ public class VideoListActivity extends BaseActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        finish();
+    public void onClick(Video video) {
+        //webView
+        Log.d(TAG, "onClick: " + video.getName());
+        Intent intent = new Intent(this, WebActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra("video_key", video.getKey());
+        startActivity(intent);
     }
 }

@@ -15,6 +15,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".WebActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".VideoListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

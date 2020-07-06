@@ -22,11 +22,8 @@ public class VideoListViewModel extends AndroidViewModel {
 
     private boolean isPerformingQuery;
     private boolean isQueryExhausted;
-    private int page;
     private String id;
-    private String query;
     private String language;
-    private String include_adult;
 
 
     public VideoListViewModel(@NonNull Application application) {
@@ -59,6 +56,7 @@ public class VideoListViewModel extends AndroidViewModel {
                     if (listResource.status == Resource.Status.SUCCESS) {
                         isPerformingQuery = false;
                         if (listResource.data != null && listResource.data.size() == 0) {
+                            isQueryExhausted = true;
                             videos.setValue(new Resource<>(
                                     Resource.Status.ERROR,
                                     listResource.data,

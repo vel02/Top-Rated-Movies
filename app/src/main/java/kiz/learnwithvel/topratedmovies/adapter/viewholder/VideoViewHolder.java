@@ -10,15 +10,21 @@ import kiz.learnwithvel.topratedmovies.R;
 import kiz.learnwithvel.topratedmovies.adapter.BaseViewHolder;
 import kiz.learnwithvel.topratedmovies.model.Video;
 
-public class VideoViewHolder extends BaseViewHolder {
+import static kiz.learnwithvel.topratedmovies.adapter.VideoRecyclerAdapter.OnVideoClickListener;
+
+public class VideoViewHolder extends BaseViewHolder implements View.OnClickListener {
 
     TextView title, type, site;
 
-    public VideoViewHolder(@NonNull View itemView) {
+    final OnVideoClickListener listener;
+
+    public VideoViewHolder(@NonNull View itemView, OnVideoClickListener listener) {
         super(itemView);
+        this.listener = listener;
         this.title = itemView.findViewById(R.id.content_video_title);
         this.type = itemView.findViewById(R.id.content_video_type);
         this.site = itemView.findViewById(R.id.content_video_site);
+        this.itemView.setOnClickListener(this);
     }
 
     @SuppressLint("SetTextI18n")
@@ -44,5 +50,10 @@ public class VideoViewHolder extends BaseViewHolder {
     @Override
     protected String format() {
         return null;
+    }
+
+    @Override
+    public void onClick(View view) {
+        this.listener.onClick(getVideo());
     }
 }

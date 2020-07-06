@@ -136,9 +136,4 @@ public class MovieContentActivity extends BaseActivity {
         super.onBackPressed();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        finish();
-    }
 }

@@ -17,11 +17,17 @@ public class VideoRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private List<Video> videos;
 
+    private final OnVideoClickListener listener;
+
+    public VideoRecyclerAdapter(OnVideoClickListener listener) {
+        this.listener = listener;
+    }
+
     @NonNull
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_video_list_item, parent, false);
-        return new VideoViewHolder(view);
+        return new VideoViewHolder(view, listener);
     }
 
     @Override
@@ -37,6 +43,12 @@ public class VideoRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     public void addList(List<Video> videos) {
         this.videos = videos;
         notifyDataSetChanged();
+    }
+
+    public interface OnVideoClickListener {
+
+        void onClick(Video video);
+
     }
 
 }
