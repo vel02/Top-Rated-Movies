@@ -15,6 +15,7 @@ import kiz.learnwithvel.topratedmovies.model.Video;
 import kiz.learnwithvel.topratedmovies.persistence.MovieDatabase;
 import kiz.learnwithvel.topratedmovies.persistence.MoviesDao;
 import kiz.learnwithvel.topratedmovies.request.ServiceGenerator;
+import kiz.learnwithvel.topratedmovies.request.respond.ApiResponse;
 import kiz.learnwithvel.topratedmovies.request.respond.MovieResponse;
 import kiz.learnwithvel.topratedmovies.request.respond.VideoResponse;
 import kiz.learnwithvel.topratedmovies.util.Constants;
@@ -65,7 +66,7 @@ public class MovieRepository {
 
             @NonNull
             @Override
-            protected Flowable<MovieResponse> createCall() {
+            protected Flowable<ApiResponse<MovieResponse>> createCall() {
                 return ServiceGenerator.getRequestApi().getTopRatedMoviesApi(
                         Constants.API_KEY, page
                 );
@@ -98,7 +99,7 @@ public class MovieRepository {
 
             @NonNull
             @Override
-            protected Flowable<MovieResponse> createCall() {
+            protected Flowable<ApiResponse<MovieResponse>> createCall() {
                 return ServiceGenerator.getRequestApi().getPopularMoviesApi(
                         Constants.API_KEY, page);
             }
@@ -129,7 +130,7 @@ public class MovieRepository {
 
             @NonNull
             @Override
-            protected Flowable<MovieResponse> createCall() {
+            protected Flowable<ApiResponse<MovieResponse>> createCall() {
                 return ServiceGenerator.getRequestApi().getUpcomingMoviesApi(
                         Constants.API_KEY, page);
             }
@@ -161,7 +162,7 @@ public class MovieRepository {
 
             @NonNull
             @Override
-            protected Flowable<MovieResponse> createCall() {
+            protected Flowable<ApiResponse<MovieResponse>> createCall() {
                 return ServiceGenerator.getRequestApi().searchMoviesApi(
                         Constants.API_KEY, include_adult, query, page);
             }
@@ -229,7 +230,7 @@ public class MovieRepository {
 
             @NonNull
             @Override
-            protected Flowable<VideoResponse> createCall() {
+            protected Flowable<ApiResponse<VideoResponse>> createCall() {
                 return ServiceGenerator.getRequestApi().getVideoApi(
                         movie_id, Constants.API_KEY, language);
             }

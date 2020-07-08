@@ -4,8 +4,8 @@ import android.util.Log;
 
 import java.util.concurrent.TimeUnit;
 
-import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
 import kiz.learnwithvel.topratedmovies.util.Constants;
+import kiz.learnwithvel.topratedmovies.util.FlowableAdapterFactory;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -36,7 +36,7 @@ public class ServiceGenerator {
     private static Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .client(client)
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())//new LiveDataAdapterFactory())
+            .addCallAdapterFactory(new FlowableAdapterFactory())//RxJava3CallAdapterFactory.create())//new LiveDataAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create());
 
     private static Retrofit retrofit = builder.build();
