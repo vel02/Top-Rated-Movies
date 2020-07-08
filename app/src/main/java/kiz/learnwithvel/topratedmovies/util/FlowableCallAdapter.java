@@ -40,8 +40,8 @@ public class FlowableCallAdapter<R> implements CallAdapter<R, Flowable<ApiRespon
                     }
 
                     @Override
-                    public void onFailure(Call<R> call, Throwable t) {
-                        subscriber.onNext(apiResponse.error(t));
+                    public void onFailure(Call<R> call, Throwable throwable) {
+                        subscriber.onNext(apiResponse.error(throwable));
                     }
                 });
             }

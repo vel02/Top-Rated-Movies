@@ -36,7 +36,7 @@ public class ServiceGenerator {
     private static Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .client(client)
-            .addCallAdapterFactory(new FlowableAdapterFactory())//RxJava3CallAdapterFactory.create())//new LiveDataAdapterFactory())
+            .addCallAdapterFactory(new FlowableAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create());
 
     private static Retrofit retrofit = builder.build();
