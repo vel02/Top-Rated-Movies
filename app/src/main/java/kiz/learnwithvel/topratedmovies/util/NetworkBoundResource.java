@@ -5,9 +5,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
 
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import kiz.learnwithvel.topratedmovies.AppExecutor;
 import kiz.learnwithvel.topratedmovies.request.respond.ApiResponse;
 
@@ -45,6 +49,41 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
         });
     }
 
+    private LiveData<ApiResponse<RequestObject>> createCallResponse() {
+
+        MediatorLiveData<ApiResponse<RequestObject>> result = new MediatorLiveData<>();
+
+        final LiveData<ApiResponse<RequestObject>> source = LiveDataReactiveStreams.fromPublisher(
+                createCall()
+                        .onErrorReturn(new Function<Throwable, RequestObject>() {
+                            @Override
+                            public RequestObject apply(Throwable throwable) throws Throwable {
+                                return (RequestObject) new ApiResponse.ApiErrorResponse<RequestObject>(throwable.getMessage());
+                            }
+                        })
+                        .map(new Function<RequestObject, ApiResponse<RequestObject>>() {
+                            @Override
+                            public ApiResponse<RequestObject> apply(RequestObject requestObject) throws Throwable {
+                                if (requestObject instanceof ApiResponse.ApiErrorResponse) {
+                                    return new ApiResponse.ApiErrorResponse<>(((ApiResponse.ApiErrorResponse) requestObject).getMessage());
+                                }
+                                return new ApiResponse.ApiSuccessResponse<>(requestObject);
+                            }
+                        })
+                        .subscribeOn(Schedulers.io())
+        );
+
+        result.addSource(source, new Observer<ApiResponse<RequestObject>>() {
+            @Override
+            public void onChanged(ApiResponse<RequestObject> requestObjectApiResponse) {
+                result.setValue(requestObjectApiResponse);
+                result.removeSource(source);
+            }
+        });
+
+        return result;
+    }
+
     private void fetchFromNetwork(LiveData<CacheObject> dbSource) {
         result.addSource(dbSource, new Observer<CacheObject>() {
             @Override
@@ -53,7 +92,7 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
             }
         });
 
-        final LiveData<ApiResponse<RequestObject>> apiResponse = createCall();
+        final LiveData<ApiResponse<RequestObject>> apiResponse = createCallResponse();
 
         result.addSource(apiResponse, new Observer<ApiResponse<RequestObject>>() {
             @Override
@@ -136,6 +175,6 @@ public abstract class NetworkBoundResource<CacheObject, RequestObject> {
 
     @NonNull
     @MainThread
-    protected abstract LiveData<ApiResponse<RequestObject>> createCall();
+    protected abstract Flowable<RequestObject> createCall();
 
 }

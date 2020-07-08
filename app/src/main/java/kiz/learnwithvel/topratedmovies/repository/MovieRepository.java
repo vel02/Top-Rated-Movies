@@ -8,13 +8,13 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
 import kiz.learnwithvel.topratedmovies.AppExecutor;
 import kiz.learnwithvel.topratedmovies.model.Movie;
 import kiz.learnwithvel.topratedmovies.model.Video;
 import kiz.learnwithvel.topratedmovies.persistence.MovieDatabase;
 import kiz.learnwithvel.topratedmovies.persistence.MoviesDao;
 import kiz.learnwithvel.topratedmovies.request.ServiceGenerator;
-import kiz.learnwithvel.topratedmovies.request.respond.ApiResponse;
 import kiz.learnwithvel.topratedmovies.request.respond.MovieResponse;
 import kiz.learnwithvel.topratedmovies.request.respond.VideoResponse;
 import kiz.learnwithvel.topratedmovies.util.Constants;
@@ -65,7 +65,7 @@ public class MovieRepository {
 
             @NonNull
             @Override
-            protected LiveData<ApiResponse<MovieResponse>> createCall() {
+            protected Flowable<MovieResponse> createCall() {
                 return ServiceGenerator.getRequestApi().getTopRatedMoviesApi(
                         Constants.API_KEY, page
                 );
@@ -98,7 +98,7 @@ public class MovieRepository {
 
             @NonNull
             @Override
-            protected LiveData<ApiResponse<MovieResponse>> createCall() {
+            protected Flowable<MovieResponse> createCall() {
                 return ServiceGenerator.getRequestApi().getPopularMoviesApi(
                         Constants.API_KEY, page);
             }
@@ -129,7 +129,7 @@ public class MovieRepository {
 
             @NonNull
             @Override
-            protected LiveData<ApiResponse<MovieResponse>> createCall() {
+            protected Flowable<MovieResponse> createCall() {
                 return ServiceGenerator.getRequestApi().getUpcomingMoviesApi(
                         Constants.API_KEY, page);
             }
@@ -161,7 +161,7 @@ public class MovieRepository {
 
             @NonNull
             @Override
-            protected LiveData<ApiResponse<MovieResponse>> createCall() {
+            protected Flowable<MovieResponse> createCall() {
                 return ServiceGenerator.getRequestApi().searchMoviesApi(
                         Constants.API_KEY, include_adult, query, page);
             }
@@ -229,7 +229,7 @@ public class MovieRepository {
 
             @NonNull
             @Override
-            protected LiveData<ApiResponse<VideoResponse>> createCall() {
+            protected Flowable<VideoResponse> createCall() {
                 return ServiceGenerator.getRequestApi().getVideoApi(
                         movie_id, Constants.API_KEY, language);
             }

@@ -62,6 +62,7 @@ dependencies {
     def glideVersion = "4.11.0"
     def room_version = "2.2.5"
     def lifecycle_version = "2.2.0"
+    def rxVersion = "3.0.4"
 
 
     //retrofit
@@ -86,4 +87,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+
+
+    // RxJava
+    implementation "io.reactivex.rxjava3:rxjava:$rxVersion"
+    // Rx-Retrofit Call Adapter
+    implementation "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0"
+    //RxJava ReactiveStream support for LiveData
+    implementation "androidx.lifecycle:lifecycle-reactivestreams:$lifecycle_version"
 }
